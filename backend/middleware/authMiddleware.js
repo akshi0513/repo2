@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken'); // npm install jsonwebtoken
+const User = require('../models/userModel');
 
 const secretKey = "hello"
 
-// middlware happens between request and response
-// next is a node js inbuilt function which triggers the API flow to move forward. When our task is complete successfully inside the middleware, we call the next function triggering the API flow to move forward
+
 const protect = async (req, res, next) => {
     let token;
 

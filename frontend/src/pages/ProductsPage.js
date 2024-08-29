@@ -1,17 +1,40 @@
-import React, { useContext } from 'react';
-import { ProductContext } from '../context/ProductContext';
-import ProductList from '../components/ProductList';
-import ProductForm from '../components/ProductForm';
+import React, { useState } from 'react';
+import ProductForm from '../components/ProductManagement/ProductForm';
+import ProductList from '../components/ProductManagement/ProductList';
+import { Container, Grid } from '@mui/material';
 
 const ProductsPage = () => {
-  const { products, setProducts } = useContext(ProductContext);
+  const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  const onEdit = (product) => {
+    // Set the product that is being edited
+    setEditingProduct(product);
+  };
+
+  const fetchProducts = async () => {
+    
+  };
 
   return (
-    <div>
-      <h1>Products</h1>
-      <ProductForm setProducts={setProducts} />
-      <ProductList products={products} />
-    </div>
+    <Container>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <ProductForm 
+            setProducts={setProducts} 
+            editingProduct={editingProduct} 
+            setEditingProduct={setEditingProduct}
+            fetchProducts={fetchProducts}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <ProductList 
+            onEdit={onEdit} 
+            fetchProducts={fetchProducts}
+          />
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

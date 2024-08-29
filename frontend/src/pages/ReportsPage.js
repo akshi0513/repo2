@@ -1,12 +1,12 @@
 import React from 'react';
-import ReportList from '../components/ReportList';
+import Reports from '../components/Reporting/Reports';
+import { Container } from '@mui/material';
 
 const ReportsPage = () => {
   return (
-    <div>
-      <h1>Reports</h1>
-      <ReportList />
-    </div>
+    <Container>
+      <Reports />
+    </Container>
   );
 };
 
