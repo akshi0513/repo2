@@ -2,16 +2,16 @@ const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 
 exports.createOrder = async (req, res) => {
-   const { productId, quantity } = req.body;
+   const { product_id, quantity } = req.body;
 
-   const product = await Product.findById(productId);
+   const product = await Product.findById(product_id);
 
    if (!product) {
       return res.status(404).json({ message: 'Product not found' });
    }
 
    const order = new Order({
-      product: productId,
+      product: product_id,
       quantity,
    });
 

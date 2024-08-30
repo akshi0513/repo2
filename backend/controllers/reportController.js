@@ -26,7 +26,15 @@ exports.getTotalStockValue = async (req, res) => {
 // Get most sold products
 exports.getMostSoldProducts = async (req, res) => {
    try {
+      const startDate = new Date(req.query.start_date);
+      const endDate = new Date(req.query.end_date);
+
       const mostSoldProducts = await Order.aggregate([
+         {
+            $match: {
+               createdAt: { $gte: startDate, $lte: endDate }
+            }
+         },
          {
             $group: {
                _id: '$product',
@@ -37,7 +45,7 @@ exports.getMostSoldProducts = async (req, res) => {
             $sort: { totalQuantity: -1 },
          },
          {
-            $limit: 5, // Change this number to return more or fewer products
+            $limit: 5,
          },
          {
             $lookup: {
@@ -66,10 +74,19 @@ exports.getMostSoldProducts = async (req, res) => {
    }
 };
 
+
 // Get least sold products
 exports.getLeastSoldProducts = async (req, res) => {
    try {
+      const startDate = new Date(req.query.start_date);
+      const endDate = new Date(req.query.end_date);
+
       const leastSoldProducts = await Order.aggregate([
+         {
+            $match: {
+               createdAt: { $gte: startDate, $lte: endDate }
+            }
+         },
          {
             $group: {
                _id: '$product',
@@ -80,7 +97,7 @@ exports.getLeastSoldProducts = async (req, res) => {
             $sort: { totalQuantity: 1 },
          },
          {
-            $limit: 5, // Change this number to return more or fewer products
+            $limit: 5,
          },
          {
             $lookup: {
@@ -109,10 +126,19 @@ exports.getLeastSoldProducts = async (req, res) => {
    }
 };
 
+
 // Get inventory movement (products restocked or sold the most)
 exports.getInventoryMovement = async (req, res) => {
    try {
+      const startDate = new Date(req.query.start_date);
+      const endDate = new Date(req.query.end_date);
+
       const inventoryMovement = await Order.aggregate([
+         {
+            $match: {
+               createdAt: { $gte: startDate, $lte: endDate }
+            }
+         },
          {
             $group: {
                _id: '$product',
@@ -146,10 +172,19 @@ exports.getInventoryMovement = async (req, res) => {
    }
 };
 
+
 // Get supplier performance (delivery times, order fulfillment rates)
 exports.getSupplierPerformance = async (req, res) => {
    try {
+      const startDate = new Date(req.query.start_date);
+      const endDate = new Date(req.query.end_date);
+
       const supplierPerformance = await Order.aggregate([
+         {
+            $match: {
+               createdAt: { $gte: startDate, $lte: endDate }
+            }
+         },
          {
             $lookup: {
                from: 'products',
