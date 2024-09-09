@@ -53,7 +53,7 @@ exports.deleteSupplier = async (req, res) => {
    const supplier = await Supplier.findById(req.params.id);
 
    if (supplier) {
-      await supplier.remove();
+      await supplier.deleteOne();
       res.json({ message: 'Supplier removed' });
    } else {
       res.status(404).json({ message: 'Supplier not found' });

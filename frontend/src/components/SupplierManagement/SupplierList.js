@@ -1,42 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Container, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
+import React from 'react';
+import { List, ListItem, ListItemText, IconButton, Typography, Container } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const SupplierList = () => {
-  const [suppliers, setSuppliers] = useState([]);
+const SupplierList = ({ suppliers, onEditSupplier, onSupplierDeleted }) => {
+  if (!suppliers || suppliers.length === 0) {
+    return <Typography>No suppliers found.</Typography>;
+  }
 
-  useEffect(() => {
-    const fetchSuppliers = async () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        const response = await axios.get('http://localhost:9001/api/suppliers', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setSuppliers(response.data);
-      } catch (error) {
-        console.error('Error fetching suppliers', error);
-      }
-    };
+  const handleEdit = (id) => {
+    console.log("Edit clicked for supplier ID:", id);
+    onEditSupplier(id);
+  };
 
-    fetchSuppliers();
-  }, []);
+  const handleDelete = (id) => {
+    console.log("Delete clicked for supplier ID:", id);
+    onSupplierDeleted(id);
+  };
 
   return (
     <Container>
       <Typography variant="h4">Supplier List</Typography>
       <List>
         {suppliers.map((supplier) => (
-          <div key={supplier._id}>
-            <ListItem>
-              <ListItemText
-                primary={supplier.name}
-                secondary={`Contact Info: ${supplier.contact_info}`}
-              />
-            </ListItem>
-            <Divider />
-          </div>
+          <ListItem key={supplier._id}>
+            <ListItemText
+              primary={supplier.name}
+              secondary={
+                <>
+                  Contact: {supplier.contact_info}
+                  <br />
+                  Products Supplied: {supplier.products.map(product => product.name).join(', ')}
+                </>
+              }
+            />
+            <IconButton onClick={() => handleEdit(supplier._id)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => handleDelete(supplier._id)}>
+              <DeleteIcon />
+            </IconButton>
+          </ListItem>
         ))}
       </List>
     </Container>
